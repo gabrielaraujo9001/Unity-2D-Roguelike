@@ -64,13 +64,22 @@ public class NewBehaviourScript : MonoBehaviour {
 		return randomPosition;
 	}
 
-	// Use this for initialization
-	void Start () {
-	
+	void LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum){
+		int objectCount = Random.Range (minimum, maximum + 1);
+		for (int i=0; i<objectCount; i++) {
+			Vector3 randomPosition = RandomPosition();
+			GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
+			Instantiate(tileChoice, randomPosition, Quaternion.identity);
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public void SetupScene(int level){
+		BoardSetup ();
+		InitialiseList ();
+		LayoutObjectAtRandom (wallTiles, wallCount.minimum, wallCount.maximum);
+		LayoutObjectAtRandom (foodTiles, foodCount.minimum, foodCount.maximum);
+		int enemyCount = (int)Mathf.Log (level, 2f);
+		LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
+		Instantiate (exit, new Vector3 (columns - 1, rows - 1, 0f), Quaternion.identity);
 	}
 }
